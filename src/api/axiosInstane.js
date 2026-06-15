@@ -12,3 +12,7 @@ export const GetPosts = () => {
   return api.get("/posts");
 };
 
+// delte posts from json placeholder
+export const deletePosts = (id) => {
+  return api.delete(`/posts/${id}`);
+};

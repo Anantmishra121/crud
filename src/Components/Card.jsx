@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { GetPosts } from "../api/axiosInstane";
+import { deletePosts } from "../api/axiosInstane";
 
 const Card = () => {
   const [data, setData] = useState([]);
@@ -11,6 +12,23 @@ const Card = () => {
       setData(res.data);
     } catch (error) {
       console.error("Error fetching posts:", error);
+    }
+  };
+
+  const handleDeletePosts = async (id) => {
+    try {
+      const res = await deletePosts(id);
+      console.log(res);
+      if (res.status === 200) {
+        const UpdatePosts = data.filter((item) => {
+          return item.id != id;
+        });
+        setData(UpdatePosts);
+      } else {
+        console.log(`Failed to Delete Posts`, res.status);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -37,7 +55,11 @@ const Card = () => {
               Edit
             </button>
 
-            <button className="rounded-md bg-red-500 px-4 py-2 text-white hover:bg-red-600">
+            <button
+              onClick={() => {
+                handleDeletePosts(item.id);
+              }}
+              className="rounded-md bg-red-500 px-4 py-2 text-white hover:bg-red-600">
               Delete
             </button>
           </div>
